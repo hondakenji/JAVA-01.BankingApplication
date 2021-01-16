@@ -1,0 +1,106 @@
+package learning.com;
+
+import java.util.Scanner;
+
+public class Main {
+
+  public static void main(String[] args) {
+    BankingApplication newUser = new BankingApplication("Usuário1", "200655");
+    newUser.showMenu();
+  }
+}
+
+class BankingApplication {
+  Scanner readInput = new Scanner(System.in); // Scanner to read the input
+  char input = '\0'; // Variable to alocate the input option
+  float balance; // Variable to alocate the balance value
+  float depositValue; // Variable to alocate the deposit value
+  float withdrawValue; // Variable to alocate the withdraw value
+  float previousOperation; // Variable to keep track the last transaction
+  String userName, userID; // Variables used in the constructor
+
+  // Constructor
+  BankingApplication(String uName, String uID) {
+    this.userName = uName; // The variable uName receives the username from the object newUser
+    this.userID = uID; // The variable uID receives the userID from the object newUser
+  }
+
+  // Method to deposit the value, using the variable amount as parameter
+  void deposit(float amount) {
+    if (amount > 0) {
+      this.balance += amount;
+      this.previousOperation = amount; // In the deposit case, the amount is positive
+    }
+  }
+
+  // Method to withdraw the value, using the variable amount as a parameter
+  void withdraw(float amount) {
+    if (amount > 0) {
+      this.balance -= amount;
+      this.previousOperation = -amount; // In the withdraw case, the amount is negative
+    }
+  }
+
+  // Method to keep track the last operation made
+  // If the value was > 0, it was a deposit
+  // If the value wwas < 0, it was a withdraw
+  void lastOperation() {
+    if (this.previousOperation > 0) {
+      System.out.println("The last operation was a deposit of" + " R$ " + this.previousOperation);
+      System.out.println("-----------------------------------------------");
+    } else if (this.previousOperation < 0) {
+      System.out.println("The last operation was a withdraw of" + " R$" + Math.abs(this.previousOperation));
+      System.out.println("-----------------------------------------------");
+    } else {
+      System.out.println("There were no transactions");
+      System.out.println("-----------------------------------------------");
+    }
+  }
+
+  // Method to print out all the information
+  void showMenu() {
+    System.out.println("---------- WELCOME " + userName + this.userID + " ----------");
+    System.out.println("Please, choose one option below: ");
+    System.out.println("A. Balance \nB. Deposit \nC. Withdraw \nD. Last Operation \nE. Exit");
+    do {
+      System.out.print("Option: ");
+      input = readInput.next().toUpperCase().charAt(0); // Only reads the first character
+      System.out.println("-----------------------------------------------");
+      switch (input) {
+        // case A shows the balance
+        case 'A':
+          System.out.println("Balance: " + " R$ " + this.balance);
+          System.out.println("-----------------------------------------------");
+          break;
+        // case B reads the deposit value and executes the method deposit()
+        case 'B':
+          System.out.print("Enter the value to deposit: ");
+          depositValue = readInput.nextFloat();
+          deposit(depositValue);
+          System.out.println("-----------------------------------------------");
+          break;
+        // case C reads the withdraw value and executes the method withdraw()
+        case 'C':
+          System.out.print("Enter the value to withdraw: ");
+          withdrawValue = readInput.nextFloat();
+          withdraw(withdrawValue);
+          System.out.println("-----------------------------------------------");
+          break;
+        // case D shows the user which was the last transaction made
+        case 'D':
+          lastOperation();
+          break;
+        // shows an error message to the user, asking to enter a valid input value if it was different than E
+        default:
+          if (this.input != 'E') {
+            System.out.println("Please, enter a valid option.");
+            System.out.println("-----------------------------------------------");
+          }
+          break;
+      } // end switch
+    } // end loop
+    while (this.input != 'E');
+    System.out.println("THANK YOU FOR USING OUR SERVICES!");
+    System.out.println("-----------------------------------------------");
+  } // end showMenu()
+} // end class
